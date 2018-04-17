@@ -1,0 +1,49 @@
+#Installation and configuration of MariaDB Galera Cluster on CentOS7
+#Prerequests - have installed 3 db hosts
+#Uninstall mysql-server if already installed.
+yum erase mysql-server mysql mysql-devel
+
+#Remove folder /var/lib/mysql
+rm -rf /var/lib/mysql
+
+#Create repo for MariaDB with Galera
+vi /etc/yum.repos.d/mariadb
+	[mariadb]
+	name = MariaDB
+	baseurl = http://yum.mariadb.org/
+	gpgkey =
+	gpgcheck = 1
+Save!
+
+#Modify hosts file to map hostname with IP address
+#On every host in /etc/hosts
+
+vi /etc/hosts
+ipadd1xxx.xxx.xxx.xxx hostname1
+ipadd2xxx.xxx.xxx.xxx hostname2
+ipadd3xxx.xxx.xxx.xxx hostname3
+
+Save!
+
+#Disable SELinux
+setenforce 0
+
+#Install MariaDB and Galera software packages in all the nodes of cluster
+yum install MariaDB-Galera-server MariaDB-client rsync galera
+
+#Start the database service on all nodes of cluster
+service mysql start
+
+#Secure the mysql by apply the root password, repeat the step below in all nodes od cluster
+mysql_secure_installation
+
+#Create user permission in database to allow cluster nodes to allow communication between the nodes.
+
+mysql -u root -p
+mysql> DELETE FROM mysql.user WHERE user='';
+mysql> GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'dbpass';
+mysql> GRANT USAGE ON *.* to cluster_user@'%' IDENTIFIED BY 'securepass';
+mysql> GRANT ALL PRIVILEGES on *.* to cluster_user@'%';
+mysql> FLUSH PRIVILEGES;
+mysql> quit
+

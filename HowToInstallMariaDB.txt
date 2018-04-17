@@ -1,0 +1,38 @@
+Install MariaDB
+1.Create REPO
+# MariaDB 10.0 CentOS repository list - created 2013-03-09 20:58 UTC
+# http://mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.0/centos6-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+Open VIM and save file in yum repo
+
+sudo mv -vi MariaDB.repo /etc/yum.repos.d/
+*****************************
+2. Start installation
+sudo yum install MariaDB-server MariaDB-client
+
+3.Start mysql service
+sudo /etc/init.d/mysql start
+
+4.Connect to Database
+After installing MariaDB, we can quickly test that MariaDB is up and running by
+opening a terminal or command-line window and running the following command
+(on Windows we can also open the mysql client .exe in the MariaDB folder):
+mysql -u root -p
+
+--after -p we need to type password witch we create in installation process
+
+If we didnt create password for root user we can login without -p parameter
+
+Not having a password for the root user can be dangerous!
+
+5.
+
+
+
+
+
